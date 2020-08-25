@@ -1,6 +1,14 @@
 # Three_USB_Color_Light
 The goal of this project is to set the color of two neopixel rings based on which USB cable is powered.  I plugged the USB cables into my game consoles, so when a console is powered, the shelf llght will have the corresponding color.
 
+**How it Works**
+
+Plug each USB cable into your separate devices.  The isolation diodes allow the trinket to be powered by any or all of the USB cables.  Periodically, the trinket will read the input pins to determine which USB cable is powered and will play the programmed animation and colors or combination of colors.
+
+The trinket needs pull down resistors to set the idle state of an input pin when a USB cable is not powered or left unattached.
+
+----
+
 **Part List**
 
 * Trinket 5V - <https://amzn.to/3gpQX6z>
@@ -41,14 +49,6 @@ Use the arduino ide and adafruit neopixel library and adafruit trinket board pac
 * <https://github.com/adafruit/Adafruit_NeoPixel>
 
 If you followed my pin assignments, you can use the code without modification.  After you get the neopixels to light up and changing based on which USB cable is powered.   You can explore modifying the colors and animations.
-
-----
-
-**How it Works**
-
-Plug each USB cable into your separate devices.  The isolation diodes allow the trinket to be powered by any or all of the USB cables.  Periodically, the trinket will read the input pins to determine which USB cable is powered and will play the programmed animation and colors or combination of colors.
-
-The trinket needs pull down resistors to set the idle state of an input pin when a USB cable is not powered or left unattached.
 
 ----
 
