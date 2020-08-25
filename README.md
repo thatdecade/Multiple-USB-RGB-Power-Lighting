@@ -11,6 +11,8 @@ The goal of this project is to set the color of two neopixel rings based on whic
 * Three 10k resistors - <https://octopart.com/search?q=RC0603FR-0710KL>
 * Three USB Cables (dollar store)
 
+The backpack pcb is optional.  You can just as easily wire up the diodes and resistors on a protoboard.  
+
 **Pin Assignments**
 
 Not all pins on the Trinket are equal.  Be sure to read Adafruit's help pages <https://learn.adafruit.com/introducing-trinket/pinouts>  Pins 3 and 4 should not be used as inputs and will conflict with talking to a PC for programming.
@@ -52,9 +54,8 @@ The trinket needs pull down resistors to set the idle state of an input pin when
 
 **Additional Notes**
 
-I used the NeoPixel ring I listed above because that is what I had extra.  If I were to make one from scratch, I would use the [RGBW Neopixel Rings](https://octopart.com/search?q=adafruit+2854) instead.  So I could use the Puck Light for normal lighting too.
+I used the NeoPixel ring and Trinket I listed above because that is what I had extra.  If I were to make one from scratch, I would use the [RGBW Neopixel Rings](https://octopart.com/search?q=adafruit+2854) and [Arduino NANO 33 IoT](https://amzn.to/3lg6Tfj) instead.  So I could use the Puck Light for normal lighting with commands to Alexa to change colors too! <https://blog.arduino.cc/2019/11/12/create-a-voice-controlled-device-with-alexa-and-arduino-iot-cloud-in-7-minutes/>
 
-The backpack pcb is optional.  You can just as easily wire up the diodes and resistors on some protoboard.  
 
 
 _We are a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for us to earn fees by linking to Amazon.com and affiliated sites._
