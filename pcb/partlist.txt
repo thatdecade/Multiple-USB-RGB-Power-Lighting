@@ -1,0 +1,18 @@
+Partlist
+
+EAGLE Version 7.7.0 Copyright (c) 1988-2016 CadSoft
+
+Assembly variant: 
+
+Part     Value            Package          Library            Position (inch)       Orientation
+
+D1       CMF04(TE12L,Q,M) M-FLAT_TOS       CMF04(TE12L,Q)     (0.3 0.55)            MR0
+D2       CMF04(TE12L,Q,M) M-FLAT_TOS       CMF04(TE12L,Q)     (0.3 0.4)             MR0
+D3       CMF04(TE12L,Q,M) M-FLAT_TOS       CMF04(TE12L,Q)     (0.3 0.25)            MR0
+LED1     SMLP34RGB2W3     LED_SML-P24M_ROM SMLP34RGB2W3A      (0.075 0.72)          MR90
+R1       220              0603             SparkFun-Resistors (0.205 0.785)         MR180
+R2       220              0603             SparkFun-Resistors (0.205 0.715)         MR180
+R3       220              0603             SparkFun-Resistors (0.205 0.645)         MR180
+R4       10k              0603             SparkFun-Resistors (0.4 0.715)           MR0
+R5       10k              0603             SparkFun-Resistors (0.4 0.785)           MR0
+R6       10k              0603             SparkFun-Resistors (0.4 0.645)           MR0
