@@ -47,3 +47,5 @@ I used the NeoPixel ring I listed above because that is what I had extra.  If I 
 The backpack pcb is optional.  You can just as easily wire up the diodes and resistors on some protoboard.  
 
 
+_We are a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for us to earn fees by linking to Amazon.com and affiliated sites._
+
