@@ -1,6 +1,8 @@
 # Three_USB_Color_Light
 The goal of this project is to set the color of two neopixel rings based on which USB cable is powered.  I plugged the USB cables into my game consoles, so when a console is powered, the shelf llght will have the corresponding color.
 
+![Neopixel Ring Puck Lights](https://github.com/thatdecade/Three_USB_Color_Light/raw/master/photos/shelf_light_installed.png)
+
 **How it Works**
 
 Plug each USB cable into your separate devices.  The isolation diodes allow the trinket to be powered by any or all of the USB cables.  Periodically, the trinket will read the input pins to determine which USB cable is powered and will play the programmed animation and colors or combination of colors.
