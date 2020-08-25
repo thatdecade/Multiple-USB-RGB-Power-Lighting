@@ -54,7 +54,9 @@ The trinket needs pull down resistors to set the idle state of an input pin when
 
 **Additional Notes**
 
-I used the NeoPixel ring and Trinket I listed above because that is what I had extra.  If I were to make one from scratch, I would use the [RGBW Neopixel Rings](https://octopart.com/search?q=adafruit+2854) and [Arduino NANO 33 IoT](https://amzn.to/3lg6Tfj) instead.  So I could use the Puck Light for normal lighting with commands to Alexa to change colors too! <https://blog.arduino.cc/2019/11/12/create-a-voice-controlled-device-with-alexa-and-arduino-iot-cloud-in-7-minutes/>
+I used the NeoPixel ring and Trinket I listed above because that is what I had extra.  If I were to make one from scratch, I would use the [RGBW Neopixel Rings](https://octopart.com/search?q=adafruit+2854) and [Arduino NANO 33 IoT](https://amzn.to/3lg6Tfj) instead.  So I could use the Puck Light for normal lighting with commands to Alexa to change colors too!  
+
+More Info: <https://blog.arduino.cc/2019/11/12/create-a-voice-controlled-device-with-alexa-and-arduino-iot-cloud-in-7-minutes/>
 
 
 
