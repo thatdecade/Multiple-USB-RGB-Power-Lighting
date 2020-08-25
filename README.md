@@ -30,6 +30,16 @@ Solder the resistors and diodes to the backpack, then wire into the trinket.  St
 
 Take apart the puck light and remove the PCB.  Recycling the wiring that came with the puck light to wire into your neopixel rings.  Use hot glue or epoxy to add the neopixel ring behind the puck light's diffuser.
 
+**Programming**
+
+Use the arduino ide and adafruit neopixel library and adafruit trinket board package.  Be sure to read Adafruit's help pages for each module.
+
+* <https://learn.adafruit.com/adafruit-arduino-ide-setup/arduino-1-dot-6-x-ide>
+* <https://learn.adafruit.com/introducing-trinket/setting-up-with-arduino-ide>
+* <https://github.com/adafruit/Adafruit_NeoPixel>
+
+If you followed my pin assignments, you can use the code without modification.  After you get the neopixels to light up and changing based on which USB cable is powered.   You can explore modifying the colors and animations.
+
 ----
 
 **How it Works**
