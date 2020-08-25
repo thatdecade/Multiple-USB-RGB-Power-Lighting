@@ -22,6 +22,8 @@ Not all pins on the Trinket are equal.  Be sure to read Adafruit's help pages <h
 
 **Assembly**
 
+If you have access to a 3d printer, an enclosure stl is provided.  Thread the cables through the enclosure sides before soldering.
+
 Solder the resistors and diodes to the backpack, then wire into the trinket.  Strip the USB cables and identify the 5V and Ground wires.  Use a multimeter to be sure, but the 5V and Ground wires can also be identified by thickness.  The power wires should be thicker than the data wires.
 
 *There is a RGB LED and three 220 ohm resistors on the backback pcb for debugging, leave them unpopulated.*
