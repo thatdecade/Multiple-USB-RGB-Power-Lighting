@@ -34,9 +34,9 @@ Take apart the puck light and remove the PCB.  Recycling the wiring that came wi
 
 **How it Works**
 
-Plug each USB cable into your separate devices.  The trinket can be powered by any or all of the USB cables.  Periodically, the trinket will read the input pins to determine which USB cable is powered and will play the programmed animation and colors.
+Plug each USB cable into your separate devices.  The isolation diodes allow the trinket to be powered by any or all of the USB cables.  Periodically, the trinket will read the input pins to determine which USB cable is powered and will play the programmed animation and colors or combination of colors.
 
-The pull down resistors and diodes help setup the conditions on the input pins, so the trinket can both be powered by any of the USB cables while also reading which USB cable is providing power.
+The trinket needs pull down resistors to set the idle state of an input pin when a USB cable is not powered or left unattached.
 
 ----
 
