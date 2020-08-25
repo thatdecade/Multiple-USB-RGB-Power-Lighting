@@ -1,6 +1,14 @@
 # Three_USB_Color_Light
 The goal of this project is to set the color of two neopixel rings based on which USB cable is powered.  I plugged the USB cables into my game consoles, so when a console is powered, the shelf llght will have the corresponding color.
 
+**How it Works**
+
+Plug each USB cable into your separate devices.  The isolation diodes allow the trinket to be powered by any or all of the USB cables.  Periodically, the trinket will read the input pins to determine which USB cable is powered and will play the programmed animation and colors or combination of colors.
+
+The trinket needs pull down resistors to set the idle state of an input pin when a USB cable is not powered or left unattached.
+
+----
+
 **Part List**
 
 * Trinket 5V - <https://amzn.to/3gpQX6z>
@@ -10,6 +18,8 @@ The goal of this project is to set the color of two neopixel rings based on whic
 * Three diodes - <https://octopart.com/search?q=CMF04%28TE12L%2CQ%2CM%29>
 * Three 10k resistors - <https://octopart.com/search?q=RC0603FR-0710KL>
 * Three USB Cables (dollar store)
+
+The backpack pcb is optional.  You can just as easily wire up the diodes and resistors on a protoboard.  
 
 **Pin Assignments**
 
@@ -22,26 +32,33 @@ Not all pins on the Trinket are equal.  Be sure to read Adafruit's help pages <h
 
 **Assembly**
 
+If you have access to a 3d printer, an enclosure stl is provided.  Thread the cables through the enclosure sides before soldering.
+
 Solder the resistors and diodes to the backpack, then wire into the trinket.  Strip the USB cables and identify the 5V and Ground wires.  Use a multimeter to be sure, but the 5V and Ground wires can also be identified by thickness.  The power wires should be thicker than the data wires.
 
 *There is a RGB LED and three 220 ohm resistors on the backback pcb for debugging, leave them unpopulated.*
 
 Take apart the puck light and remove the PCB.  Recycling the wiring that came with the puck light to wire into your neopixel rings.  Use hot glue or epoxy to add the neopixel ring behind the puck light's diffuser.
 
-----
+**Programming**
 
-**How it Works**
+Use the arduino ide and adafruit neopixel library and adafruit trinket board package.  Be sure to read Adafruit's help pages for each module.
 
-Plug each USB cable into your separate devices.  The trinket can be powered by any or all of the USB cables.  Periodically, the trinket will read the input pins to determine which USB cable is powered and will play the programmed animation and colors.
+* <https://learn.adafruit.com/adafruit-arduino-ide-setup/arduino-1-dot-6-x-ide>
+* <https://learn.adafruit.com/introducing-trinket/setting-up-with-arduino-ide>
+* <https://github.com/adafruit/Adafruit_NeoPixel>
 
-The pull down resistors and diodes help setup the conditions on the input pins, so the trinket can both be powered by any of the USB cables while also reading which USB cable is providing power.
+If you followed my pin assignments, you can use the code without modification.  After you get the neopixels to light up and changing based on which USB cable is powered.   You can explore modifying the colors and animations.
 
 ----
 
 **Additional Notes**
 
-I used the NeoPixel ring I listed above because that is what I had extra.  If I were to make one from scratch, I would use the [RGBW Neopixel Rings](https://octopart.com/search?q=adafruit+2854) instead.  So I could use the Puck Light for normal lighting too.
+I used the NeoPixel ring and Trinket I listed above because that is what I had extra.  If I were to make one from scratch, I would use the [RGBW Neopixel Rings](https://octopart.com/search?q=adafruit+2854) and [Arduino NANO 33 IoT](https://amzn.to/3lg6Tfj) instead.  So I could use the Puck Light for normal lighting with commands to Alexa to change colors too!  
 
-The backpack pcb is optional.  You can just as easily wire up the diodes and resistors on some protoboard.  
+More Info: <https://blog.arduino.cc/2019/11/12/create-a-voice-controlled-device-with-alexa-and-arduino-iot-cloud-in-7-minutes/>
 
+
+
+_We are a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for us to earn fees by linking to Amazon.com and affiliated sites._
 
