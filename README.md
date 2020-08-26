@@ -62,8 +62,9 @@ If you installed the optional potentiometer, you can change the color selected b
 2. Take the USB cable you want to configure and plug it into your power block.  
 3. Wait 5 seconds (or just wait for the animation to complete)
 4. Rapidly unplug and plug the cable in four times, ending with the USB plugged in.
-    1. If you do it right, the animations will stop and you will see a steady light.  
-    2. If you mess up, wait 5 seconds before trying again.
+    1. You must complete this four times, before the spinning animation ends.
+    2. If you do it right, the animations will stop and you will see a steady light.  
+    3. If you mess up, wait 5 seconds before trying again.
 5. Slowly rotate the potentiometer to select the color.
 6. Unplug the USB cable to save the color selection.
 
