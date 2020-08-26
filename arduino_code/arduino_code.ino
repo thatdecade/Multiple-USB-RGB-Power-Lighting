@@ -19,7 +19,7 @@
 #define SPIN_SPEED 60
 #define SPIN_DURATION 80
 
-#define SOLID_COLOR_FADE_SPEED 10
+#define SOLID_COLOR_FADE_SPEED 10*15
 #define BLANKING_OFFSET 4
 
 #define RED_PIN   0
@@ -398,30 +398,23 @@ void solid_color_fade_down()
     
     //set to solid color, while also dimming gradually.
 
-    pixels.setBrightness(map(i*15+j,0,254,254,45));
+    pixels.setBrightness(map(i,0,16,254,45));
 
-    j++;
-    if(j >= 16)
+    pixels.setPixelColor(           i, color1);
+    pixels.setPixelColor(NUM_LEDS-1-i, color2);
+
+    if((i+BLANKING_OFFSET)<16)
     {
-      j = 0;
-      pixels.setPixelColor(           i, color1);
-      pixels.setPixelColor(NUM_LEDS-1-i, color2);
-  
-      if((i+BLANKING_OFFSET)<16)
-      {
-        pixels.setPixelColor(           (i+BLANKING_OFFSET), 0);
-        pixels.setPixelColor(NUM_LEDS-1-(i+BLANKING_OFFSET), 0);
-      }
-  
-      i++;
-      if(i >= 16)
-      {
-        system_mode = IDLE_MODE;
-        previous_system_mode = system_mode;
-      }
+      pixels.setPixelColor(           (i+BLANKING_OFFSET), 0);
+      pixels.setPixelColor(NUM_LEDS-1-(i+BLANKING_OFFSET), 0);
     }
-    
     pixels.show();
+
+    i++;
+    if(i >= 16)
+    {
+      system_mode = IDLE_MODE;
+      previous_system_mode = system_mode;
+    }
   }
 }
-
