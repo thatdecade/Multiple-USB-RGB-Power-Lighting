@@ -13,18 +13,20 @@
 
 #define ENABLE_COLOR_KNOB   1        //Set to 0 if you do not plan to use a potentiometer for color selection
 
+#define NUMBER_OF_TOGGLES_TO_ENTER_SETUP 5
+#define SETUP_ENTRY_TIMEOUT 8000
+
 #define SPIN_SPEED 60
 #define SPIN_DURATION 80
 
 #define SOLID_COLOR_FADE_SPEED 10
 #define BLANKING_OFFSET 4
 
-
 #define RED_PIN   0
 #define BLUE_PIN  1
 #define GREEN_PIN 2
 #define NEO_PIN   3
-#define POT_PIN   4
+#define POT_PIN   A2
 
 #define NUM_LEDS 32
 #define NUM_LEDS_ONE_WHEEL 16
@@ -91,6 +93,7 @@ void setup()
   pinMode(RED_PIN,   INPUT);
   pinMode(BLUE_PIN,  INPUT);
   pinMode(GREEN_PIN, INPUT);
+  pinMode(POT_PIN,   INPUT);
 
   //set starup colors
   user_color[USER_RED_INDEX]   = get_color_from_index(WHEEL_RED_INDEX);
@@ -108,11 +111,83 @@ void setup()
 
 void loop() {
 
+  check_for_setup_entry();
+
   check_for_input_changes();
 
   update_state_machine();
 
   draw_animation();
+}
+
+void check_for_setup_entry()
+{
+  static uint32_t previous_user_interaction = 0;
+  static uint8_t user_toggle_counter = 0;
+  static uint8_t previous_user_value = 0;
+  static uint8_t current_user_value = 0;
+
+  current_user_value = (digitalRead(GREEN_PIN) << 1) + (digitalRead(RED_PIN) << 0) + (digitalRead(BLUE_PIN) << 2);
+
+  if(current_user_value != previous_user_value)
+  {
+    previous_user_value = current_user_value;
+    user_toggle_counter++;
+    previous_user_interaction = millis();
+  }
+
+  if(user_toggle_counter > NUMBER_OF_TOGGLES_TO_ENTER_SETUP)
+  {
+    user_toggle_counter = 0;
+
+    if(current_user_value == 1)
+    {
+      setup_mode(RED_PIN, USER_RED_INDEX, RED_EEPROM_ADDRESS);
+    }
+    
+    if(current_user_value == 2)
+    {
+      setup_mode(GREEN_PIN, USER_GREEN_INDEX, GREEN_EEPROM_ADDRESS);
+    }
+    
+    if(current_user_value == 4)
+    {
+      setup_mode(BLUE_PIN, USER_BLUE_INDEX, BLUE_EEPROM_ADDRESS);
+    }
+  }
+
+  if((previous_user_interaction + SETUP_ENTRY_TIMEOUT) < millis())
+  {
+    user_toggle_counter = 0;
+    previous_user_interaction = millis();
+  }
+  
+}
+
+void setup_mode(int pin, uint8_t index, uint8_t eeprom_address)
+{
+  int analog = 0;
+  uint8_t i;
+ 
+  //continue to read pot until USB is pulled
+  while(digitalRead(pin) == HIGH)
+  {
+    //read POT set colors
+    analog = analogRead(POT_PIN);
+
+    pixels.setBrightness(45);
+    
+    for(i=0; i<NUM_LEDS; i++) 
+    {
+      pixels.setPixelColor(i, lookup_color_from_analog(analog));
+    }
+    pixels.show();
+    delay(100);
+  }
+
+  //write to eeprom
+  user_color[index] = lookup_color_from_analog(analog);
+  EEPROM.write(eeprom_address, map(analog, 0, 255, 0, ( sizeof( colorwheel ) / sizeof( uint32_t ) ) ));
 }
 
 void read_colors_from_eeprom()
@@ -166,7 +241,7 @@ uint32_t lookup_color_from_analog(int analog)
   return get_color_from_index(map(analog, 0, 255, 0, ( sizeof( colorwheel ) / sizeof( uint32_t ) ) ));
 }
 
-void  update_state_machine()
+void update_state_machine()
 {
   static uint32_t previous_color1 = 0;
   static uint32_t previous_color2 = 0;
@@ -184,8 +259,14 @@ void  update_state_machine()
 
 void draw_animation()
 {
+  if(system_mode == SPINNING)
+  {
     animate_spin();
+  }
+  else if (system_mode == FADING)
+  {
     solid_color_fade_down();
+  }
 }
 
 void check_for_input_changes()
@@ -271,6 +352,8 @@ void animate_spin()
     
     // Spinny wheels (4 LEDs on at a time)
   
+    pixels.setBrightness(254);
+    
     for(i=0; i<NUM_LEDS_ONE_WHEEL; i++) 
     {
       uint32_t c = 0;
@@ -300,6 +383,7 @@ void solid_color_fade_down()
   static uint8_t i = 0;
   static uint8_t j = 0;
   static mode_e previous_system_mode = START;
+  static uint32_t previous_primary_color = 0xff0000;
   
   if(previous_system_mode != system_mode)
   {
@@ -328,7 +412,6 @@ void solid_color_fade_down()
         pixels.setPixelColor(           (i+BLANKING_OFFSET), 0);
         pixels.setPixelColor(NUM_LEDS-1-(i+BLANKING_OFFSET), 0);
       }
-  
   
       i++;
       if(i >= 16)
