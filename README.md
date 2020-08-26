@@ -1,4 +1,4 @@
-# Three_USB_Color_Light
+# Multiple USB RGB Power Lighting
 The goal of this project is to set the color of two neopixel rings based on which USB cable is powered.  I plugged the USB cables into my game consoles, so when a console is powered, the shelf llght will have the corresponding color.
 
 ![Neopixel Ring Puck Lights](https://github.com/thatdecade/Three_USB_Color_Light/raw/master/photos/shelf_light_installed.png)
