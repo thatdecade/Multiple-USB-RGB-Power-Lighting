@@ -31,6 +31,7 @@ Not all pins on the Trinket are equal.  Be sure to read Adafruit's help pages <h
 * GPIO #1 - Blue Input, Attach to +5V wire from the second USB cable
 * GPIO #2 - Green Input, Attach to +5V wire from the third USB cable
 * GPIO #3 - Neopixel Data
+* GPIO #4 - Potentiometer (optional)
 
 **Assembly**
 
@@ -51,6 +52,20 @@ Use the arduino ide and adafruit neopixel library and adafruit trinket board pac
 * <https://github.com/adafruit/Adafruit_NeoPixel>
 
 If you followed my pin assignments, you can use the code without modification.  After you get the neopixels to light up and changing based on which USB cable is powered.   You can explore modifying the colors and animations.
+
+**Usage, Testing, and Setting Colors**
+
+After initial programming, when you plug in each of the three USB cables you should see the ring light up red or blue or green.  Combinations are allowed.
+
+If you installed the optional potentiometer, you can change the color selected by a USB cable without reprogramming using a PC.  You will need two USB power ports to plug into.  
+1. Connect the Micro USB on the trinket so power remains on while the other USBs are unplugged.  Leave this plugged in throughout these steps.
+2. Take the USB cable you want to configure and plug it into your power block.  
+3. Wait 5 seconds (or just wait for the animation to complete)
+4. Rapidly unplug and plug the cable in four times, ending with the USB plugged in.
+    1. If you do it right, the animations will stop and you will see a steady light.  
+    2. If you mess up, wait 5 seconds before trying again.
+5. Slowly rotate the potentiometer to select the color.
+6. Unplug the USB cable to save the color selection.
 
 ----
 
