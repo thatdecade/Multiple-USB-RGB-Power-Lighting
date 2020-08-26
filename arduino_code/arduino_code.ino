@@ -13,8 +13,8 @@
 
 #define ENABLE_COLOR_KNOB   1        //Set to 0 if you do not plan to use a potentiometer for color selection
 
-#define NUMBER_OF_TOGGLES_TO_ENTER_SETUP 5
-#define SETUP_ENTRY_TIMEOUT 8000
+#define NUMBER_OF_TOGGLES_TO_ENTER_SETUP 7
+#define SETUP_ENTRY_TIMEOUT 5000
 
 #define SPIN_SPEED 60
 #define SPIN_DURATION 80
@@ -182,12 +182,12 @@ void setup_mode(int pin, uint8_t index, uint8_t eeprom_address)
       pixels.setPixelColor(i, lookup_color_from_analog(analog));
     }
     pixels.show();
-    delay(100);
+    delay(500);
   }
 
   //write to eeprom
   user_color[index] = lookup_color_from_analog(analog);
-  EEPROM.write(eeprom_address, map(analog, 0, 255, 0, ( sizeof( colorwheel ) / sizeof( uint32_t ) ) ));
+  EEPROM.write(eeprom_address, map(analog, 0, 1024, 0, ( sizeof( colorwheel ) / sizeof( uint32_t ) ) ));
 }
 
 void read_colors_from_eeprom()
@@ -238,7 +238,7 @@ uint32_t get_color_from_index(uint8_t index)
 
 uint32_t lookup_color_from_analog(int analog)
 {
-  return get_color_from_index(map(analog, 0, 255, 0, ( sizeof( colorwheel ) / sizeof( uint32_t ) ) ));
+  return get_color_from_index(map(analog, 0, 1024, 0, ( sizeof( colorwheel ) / sizeof( uint32_t ) ) ));
 }
 
 void update_state_machine()
