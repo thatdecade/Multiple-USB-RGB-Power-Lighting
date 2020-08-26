@@ -9,6 +9,9 @@
 #ifdef __AVR_ATtiny85__ // Trinket, Gemma, etc.
  #include <avr/power.h>
 #endif
+#include <EEPROM.h>
+
+#define ENABLE_COLOR_KNOB   1        //Set to 0 if you do not plan to use a potentiometer for color selection
 
 #define SPIN_SPEED 60
 #define SPIN_DURATION 80
@@ -16,28 +19,53 @@
 #define SOLID_COLOR_FADE_SPEED 10
 #define BLANKING_OFFSET 4
 
-#define NEO_PIN 3
 
 #define RED_PIN   0
 #define BLUE_PIN  1
 #define GREEN_PIN 2
+#define NEO_PIN   3
+#define POT_PIN   4
 
 #define NUM_LEDS 32
 #define NUM_LEDS_ONE_WHEEL 16
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUM_LEDS, NEO_PIN);
 
-#define RED    0xFF0000
-#define BLUE   0x0000FF
-#define GREEN  0x00FF00
-#define CYAN   0x00FFFF
-#define YELLOW 0xFF00FF
+uint32_t colorwheel[] =
+{
+  0xff0000, //0 red
+  0x800000, //1 maroon
+  0xff4000, //2 orange
+  0xffff00, //3 yellow
+  0x808000, //4 olive
+  0x800080, //5 purple
+  0xff00ff, //6 fuschia
+  0xffffff, //7 white
+  0x000080, //8 navy
+  0x0000ff, //9 blue
+  0x00ffff, //10 aqua
+  0x008080, //11 teal
+  0x00ff00, //12 lime
+  0x008000, //13 green
+};
 
-//set starup colors
-uint32_t color1  = BLUE;
-uint32_t color2  = BLUE;
+#define WHEEL_RED_INDEX    0
+#define WHEEL_BLUE_INDEX   9
+#define WHEEL_GREEN_INDEX  13
+
+uint32_t color1, color2;
 
 uint32_t prevTime;
+
+#define RED_EEPROM_ADDRESS    0
+#define GREEN_EEPROM_ADDRESS  4
+#define BLUE_EEPROM_ADDRESS   8
+
+uint32_t user_color[3];
+
+#define USER_RED_INDEX    0
+#define USER_GREEN_INDEX  1
+#define USER_BLUE_INDEX   2
 
 typedef enum
 {
@@ -45,6 +73,9 @@ typedef enum
   SPINNING,
   FADING,
   IDLE_MODE,
+  SETUP_MODE_RED,
+  SETUP_MODE_BLUE,
+  SETUP_MODE_GREEN,
 } mode_e;
 
 mode_e system_mode = START;
@@ -60,6 +91,15 @@ void setup()
   pinMode(RED_PIN,   INPUT);
   pinMode(BLUE_PIN,  INPUT);
   pinMode(GREEN_PIN, INPUT);
+
+  //set starup colors
+  user_color[USER_RED_INDEX]   = get_color_from_index(WHEEL_RED_INDEX);
+  user_color[USER_GREEN_INDEX] = get_color_from_index(WHEEL_GREEN_INDEX);
+  user_color[USER_BLUE_INDEX]  = get_color_from_index(WHEEL_BLUE_INDEX);
+  color1  = user_color[USER_BLUE_INDEX];
+  color2  = user_color[USER_BLUE_INDEX];
+
+  read_colors_from_eeprom();
   
   prevTime = millis();
 
@@ -73,6 +113,57 @@ void loop() {
   update_state_machine();
 
   draw_animation();
+}
+
+void read_colors_from_eeprom()
+{
+  if(ENABLE_COLOR_KNOB)
+  {
+    user_color[USER_RED_INDEX]   = EEPROM.read(RED_EEPROM_ADDRESS);
+    user_color[USER_GREEN_INDEX] = EEPROM.read(GREEN_EEPROM_ADDRESS);
+    user_color[USER_BLUE_INDEX]  = EEPROM.read(BLUE_EEPROM_ADDRESS);
+  
+    if(user_color[USER_RED_INDEX] > ( sizeof( colorwheel ) / sizeof( uint32_t ) ))
+    {
+      user_color[USER_RED_INDEX] = WHEEL_RED_INDEX;
+      
+      EEPROM.write(RED_EEPROM_ADDRESS, WHEEL_RED_INDEX);
+    }
+    if(user_color[USER_GREEN_INDEX] > ( sizeof( colorwheel ) / sizeof( uint32_t ) ))
+    {
+      user_color[USER_GREEN_INDEX] = WHEEL_GREEN_INDEX;
+      
+      EEPROM.write(GREEN_EEPROM_ADDRESS, WHEEL_GREEN_INDEX);
+    }
+    if(user_color[USER_BLUE_INDEX] > ( sizeof( colorwheel ) / sizeof( uint32_t ) ))
+    {
+      user_color[USER_BLUE_INDEX] = WHEEL_BLUE_INDEX;
+      
+      EEPROM.write(BLUE_EEPROM_ADDRESS, WHEEL_BLUE_INDEX);
+    }
+
+    user_color[USER_RED_INDEX]   = get_color_from_index(user_color[USER_RED_INDEX]);
+    user_color[USER_GREEN_INDEX] = get_color_from_index(user_color[USER_GREEN_INDEX]);
+    user_color[USER_BLUE_INDEX]  = get_color_from_index(user_color[USER_BLUE_INDEX]);
+  }
+}
+
+void write_colors_from_eeprom(uint8_t red_idx, uint8_t green_idx, uint8_t blue_idx)
+{
+    EEPROM.write(RED_EEPROM_ADDRESS,   red_idx);
+    EEPROM.write(GREEN_EEPROM_ADDRESS, green_idx);
+    EEPROM.write(BLUE_EEPROM_ADDRESS,  blue_idx);
+}
+
+uint32_t get_color_from_index(uint8_t index)
+{
+  //perform lookup in a function to reduce program size
+  return colorwheel[index];
+}
+
+uint32_t lookup_color_from_analog(int analog)
+{
+  return get_color_from_index(map(analog, 0, 255, 0, ( sizeof( colorwheel ) / sizeof( uint32_t ) ) ));
 }
 
 void  update_state_machine()
@@ -101,28 +192,38 @@ void check_for_input_changes()
 {
   //read inputs and set color
 
+  //NONE
+  
+  if((digitalRead(GREEN_PIN) == LOW) && 
+     (digitalRead(RED_PIN) == LOW) && 
+     (digitalRead(BLUE_PIN) == LOW))
+  {
+    color1 = 0x0;
+    color2 = 0x0;
+  }
+  
   //SINGLES
   
   if((digitalRead(GREEN_PIN) == HIGH) && 
      (digitalRead(RED_PIN) == LOW) && 
      (digitalRead(BLUE_PIN) == LOW))
   {
-    color1 = GREEN;
-    color2 = GREEN;
+    color1 = user_color[USER_GREEN_INDEX];
+    color2 = user_color[USER_GREEN_INDEX];
   }
   if((digitalRead(GREEN_PIN) == LOW) && 
      (digitalRead(RED_PIN) == HIGH) && 
      (digitalRead(BLUE_PIN) == LOW))
   {
-    color1 = RED;
-    color2 = RED;
+    color1 = user_color[USER_RED_INDEX];
+    color2 = user_color[USER_RED_INDEX];
   }
   if((digitalRead(GREEN_PIN) == LOW) && 
      (digitalRead(RED_PIN) == LOW) && 
      (digitalRead(BLUE_PIN) == HIGH))
   {
-    color1 = BLUE;
-    color2 = BLUE;
+    color1 = user_color[USER_BLUE_INDEX];
+    color2 = user_color[USER_BLUE_INDEX];
   }
 
   //DOUBLES
@@ -131,25 +232,23 @@ void check_for_input_changes()
      (digitalRead(RED_PIN) == HIGH) && 
      (digitalRead(BLUE_PIN) == LOW))
   {
-    color1 = GREEN;
-    color2 = RED;
+    color1 = user_color[USER_GREEN_INDEX];
+    color2 = user_color[USER_RED_INDEX];
   }
   if((digitalRead(GREEN_PIN) == HIGH) && 
      (digitalRead(RED_PIN) == LOW) && 
      (digitalRead(BLUE_PIN) == HIGH))
   {
-    color1 = BLUE;
-    color2 = GREEN;
+    color1 = user_color[USER_BLUE_INDEX];
+    color2 = user_color[USER_GREEN_INDEX];
   }
   if((digitalRead(RED_PIN) == HIGH) && 
      (digitalRead(BLUE_PIN) == HIGH))
   {
     //DOUBLES and TRIPLES, Favor blue RED, even if green is also ON
-    color1 = BLUE;
-    color2 = RED;
+    color1 = user_color[USER_BLUE_INDEX];
+    color2 = user_color[USER_RED_INDEX];
   }
-
-  
 }
 
 void animate_spin()
