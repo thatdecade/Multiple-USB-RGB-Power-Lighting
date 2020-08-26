@@ -33,6 +33,8 @@ Not all pins on the Trinket are equal.  Be sure to read Adafruit's help pages <h
 * GPIO #3 - Neopixel Data
 * GPIO #4 - Potentiometer (optional)
 
+I added a quick disconnect to Pin 4 so when I wanted to connect to the PC, I could remove the potentiometer without soldering.
+
 **Assembly**
 
 If you have access to a 3d printer, an enclosure stl is provided.  Thread the cables through the enclosure sides before soldering.
